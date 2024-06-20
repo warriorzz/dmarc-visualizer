@@ -1,11 +1,12 @@
 version: '3.5'
 services:
   parsedmarc:
+    #image: parsedmarc
     build: ./parsedmarc/
     volumes:
       - ./files:/input:ro
-      - ./output_files:/output
-    command: parsedmarc -c /parsedmarc.ini /input/* --debug
+      - ./output-files:/output
+      - ./parsedmarc.ini:/parsedmarc.ini
     depends_on:
       - elasticsearch
     restart: on-failure
@@ -15,9 +16,10 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - ./elastic_data:/usr/share/elasticsearch/data
+      - ./elastic-data:/usr/share/elasticsearch/data
 
   grafana:
+    #image: grafana-parsedmarc
     build: ./grafana/
     ports:
       - 3000:3000

@@ -5,5 +5,7 @@ RUN apk add --update --no-cache --virtual .build_deps build-base libffi-dev \
     && pip install parsedmarc \
     && apk del .build_deps
 
-COPY parsedmarc.ini /
-#COPY GeoLite2-Country.mmdb /usr/share/GeoIP/GeoLite2-Country.mmdb
+ADD crontab /etc/cron.d/parsedmarc-cron
+RUN chmod 0644 /etc/cron.d/parsedmarc-cron
+RUN touch /var/log/cron.log
+CMD cron && tail -f /var/log/cron.log
